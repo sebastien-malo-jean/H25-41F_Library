@@ -22,18 +22,18 @@ GET books/{id}
 
 ### Ajouter un nouveau Livre
 
-POST livres/
+POST books/
 
 blablabla...
 
 ### Modifier un livre existant
 
-POST livres/{id}
+POST books/{id}
 
 blablabla...
 
 ### Supprimer un livre existant
 
-POST livres/{id}
+POST books/{id}
 
 blablabla...
