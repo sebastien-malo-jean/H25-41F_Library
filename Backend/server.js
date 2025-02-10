@@ -9,6 +9,14 @@ dotenv.config();
 
 //permission d'acces aux dossiers
 const publicFile = path.join(__dirname, "public");
+
+const { Library_BernWerb } = require(path.join(
+  publicFile,
+  "asset",
+  "data",
+  "library.js"
+));
+
 server.use(express.static(publicFile));
 
 // fonction middleWare
@@ -29,9 +37,7 @@ server.get("/", (req, res) => {
 });
 
 server.get("/books", (req, res) => {
-  return res.json({
-    msg: "Ici, c'est la page pour afficher tous les livres de la bibliotheque.",
-  });
+  return res.json(Library_BernWerb);
 });
 // POST
 server.post("/books", (req, res) => {
