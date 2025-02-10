@@ -62,4 +62,4 @@ const Library_BernWerb = [
   //   titleThumbnail: ".jpg",
   // },
 ];
-module.exports = { Library_BernWerb };
+module.exports = Library_BernWerb;
