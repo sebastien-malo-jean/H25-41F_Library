@@ -22,33 +22,61 @@ function auth(req, res, next) {
  * Routes établie pour récuperer tous les livres de la base de données.
  */
 // GET
-server.get("/", async (req, res) => {});
+server.get("/", async (req, res) => {
+  await res.json({ msg: "ici c'est la page d'index" });
+});
 
-server.get("/books", async (req, res) => {
-  const books = [];
+server.get("/character", async (req, res) => {
+  const characters = [];
 
-  const docRefs = await db.collection("books").get();
+  const docRefs = await db.collection("characters").get();
 
   docRefs.forEach((doc) => {
-    const book = doc.data();
-    books.push(book);
+    const data = doc.data();
+    const character = { id: doc.id, ...data };
+    characters.push(character);
   });
 
-  return res.json(books);
-});
-// POST
-server.post("/books", (req, res) => {
-  return res.json({ msg: "Ici, c'est la page pour la création d'un livre." });
+  return res.status(200).json(characters);
 });
 
-server.post("/books/initialisation", (req, res) => {
+server.get("/character/:id", async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const books = require("./data/library");
+    const docRef = await db.collection("characters").doc(id).get();
+
+    if (!docRef.exists) {
+      return res.status(404).json({
+        error: "L'identifiant du personnage n'est pas dans la base de donnée.",
+      });
+    }
+    const character = { id: docRef.id, ...docRef.data() };
+    return res.status(200).json({ character });
+  } catch (error) {
+    console.error("Erreur lors de la récupération du personnage :", error);
+    return res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+// POST
+server.post("/character", (req, res) => {
+  return res.json({
+    msg: "Ici, c'est la page pour la création d'un Personnage.",
+  });
+});
+
+/**
+ * Route pour la page pour initialiser la bdd.
+ */
+server.post("/character/dbinit", (req, res) => {
+  try {
+    const characters = require("./data/library");
 
     //TODO: vérifier si le livre est déja dans la bdd.
 
-    books.forEach(async (book) => {
-      await db.collection("books").add(book);
+    characters.forEach(async (character) => {
+      await db.collection("characters").add(character);
     });
     return res.status(201).json({
       msg: "base de donnée initialisé.",
@@ -59,16 +87,19 @@ server.post("/books/initialisation", (req, res) => {
     });
   }
 });
+
 // PUT
-server.put("/books/:id", (req, res) => {
-  return res.json({ msg: "Ici, c'est la page pour modifier un livre." });
+server.put("/character/:id", (req, res) => {
+  return res.json({ msg: "Ici, c'est la page pour modifier un personnage." });
 });
+
 // DELETE
-server.delete("/books/:id", (req, res) => {
+server.delete("/character/:id", (req, res) => {
   return res.json({
-    msg: "Ici c'est la page pour supprimer un livre de la bibliotheque.",
+    msg: "Ici c'est la page pour supprimer un personnage de la bibliotheque.",
   });
 });
+
 // ressource 404
 server.use((req, res) => {
   res.statusCode = 404;
@@ -76,5 +107,5 @@ server.use((req, res) => {
 });
 
 server.listen(process.env.PORT, () => {
-  console.log(`Le serveur est en écoute sur le port ${process.env.PORT}`);
+  console.log(`Le serveur est en écoute sur le port : ${process.env.PORT}`);
 });
