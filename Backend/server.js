@@ -69,15 +69,28 @@ server.post("/character", (req, res) => {
 /**
  * Route pour la page pour initialiser la bdd.
  */
-server.post("/character/dbinit", (req, res) => {
+server.post("/character/dbinit", async (req, res) => {
   try {
     const characters = require("./data/library");
 
     //TODO: vérifier si le livre est déja dans la bdd.
 
-    characters.forEach(async (character) => {
-      await db.collection("characters").add(character);
-    });
+    for (character of characters) {
+      if (character.name) {
+        const existingCharacter = await db
+          .collection("characters")
+          .where("name", "==", character.name)
+          .get();
+
+        if (existingCharacter.empty) {
+          await db.collection("characters").add(character);
+        } else {
+          return res
+            .status(200)
+            .json({ msg: "Un ou plusieurs personnages existent déjà." });
+        }
+      }
+    }
     return res.status(201).json({
       msg: "base de donnée initialisé.",
     });
