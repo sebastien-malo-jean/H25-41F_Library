@@ -9,9 +9,24 @@ const db = require("../config/db");
 
 routeur.get("/", async (req, res) => {
   try {
+    let {
+      limit = 5,
+      start = 0,
+      orderBy = "name",
+      orderDirection = "asc",
+    } = req.query;
+    limit = Number(limit);
+    start = Number(start);
+    // console.log(limit, orderBy, orderDirection);
+
     const characters = [];
 
-    const docRefs = await db.collection("characters").get();
+    const docRefs = await db
+      .collection("characters")
+      .orderBy(orderBy, orderDirection)
+      .offset(start)
+      .limit(limit)
+      .get();
 
     docRefs.forEach((doc) => {
       const data = doc.data();
