@@ -1,8 +1,8 @@
-# API Livres
+# API Personnage D & D
 
 ## Documentation
 
-Cette API permet d'afficher, d'ajouter, de modifier et de suppromer des films de la base de données. Les routes sont accessibles à partir de l'url suivante : ...
+Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personnages de la base de données.
 
 [Lien vers le code Github](https://github.com/sebastien-malo-jean/H25-41F_Library)
 
@@ -10,30 +10,78 @@ Cette API permet d'afficher, d'ajouter, de modifier et de suppromer des films de
 
 ### Récupération de la liste de tous les Livres
 
-GET books/
+[GET /character](http://localhost:3000/character)
 
-blablabla...
+#### paramètres possibles
 
-### Récupération d'un livre spécifique
+- [http://localhost:3000/character?limit=2&orderBy=name&orderDirection=asc](http://localhost:3000/character?limit=2&orderBy=name&orderDirection=asc)
 
-GET books/{id}
+- orderBy
+  - name
+  - genre
+  - class
+  - race
+  - alignement
+
+- orderDirection
+  - asc
+  - desc
+
+- limit
+  - un nombre entier
+
+### Récupération d'un personnage spécifique
+
+[GET /character/:id](http://localhost:3000/character/G7FrjAFaAZyEoLcuP6h0)
 
 - Paramètre requis : id (l'identifiant du livre à récupérer)
 
-### Ajouter un nouveau Livre
+### Ajouter un nouveau personnage
 
-POST books/
+[POST /character/](http://localhost:3000/character/)
+
+- Paramètre requis : un objet personnage dans le corp de la requête.
+
+```javascript
+    const character{
+      charVoc: "", //npc ou joueur
+      characterThumbnail: ".jpg",
+      name: "",
+      genre: "",
+      class: [""],
+      race: [""],
+      alignement: [""],
+      Traits: {
+        PersonalityTraits: "",
+        Ideals: "",
+        Bonds: "",
+        Flaws: "",
+      },
+      exp: 0,
+      lvl: 1,
+      hitPoints: {
+        totalHP: 20,
+        currentHP: 20,
+      },
+      statistics: {
+        strength: 0,
+        dexterity: 0,
+        constitution: 0,
+        intelligence: 0,
+        wisdom: 0,
+        charisma: 0,
+      },
+    },
+```
+
+### Modifier un personnage existant
+
+PUT character/:id
 
 blablabla...
 
-### Modifier un livre existant
+### Supprimer un personnage existant
 
-POST books/{id}
-
-blablabla...
-
-### Supprimer un livre existant
-
-POST books/{id}
+DELETE character/:id
 
 blablabla...
