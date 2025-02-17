@@ -10,14 +10,13 @@ const db = require("../config/db");
 routeur.get("/", async (req, res) => {
   try {
     let {
-      limit = 5,
+      limit = 3,
       start = 0,
       orderBy = "name",
       orderDirection = "asc",
     } = req.query;
     limit = Number(limit);
     start = Number(start);
-    // console.log(limit, orderBy, orderDirection);
 
     const characters = [];
 
