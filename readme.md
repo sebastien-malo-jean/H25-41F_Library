@@ -8,7 +8,7 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ## Routes
 
-### Récupération de la liste de tous les Livres
+### Récupération de la liste de tous les personnages
 
 [GET /character](http://localhost:3000/character)
 
@@ -34,7 +34,7 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 [GET /character/:id](http://localhost:3000/character/G7FrjAFaAZyEoLcuP6h0)
 
-- Paramètre requis : id (l'identifiant du livre à récupérer)
+- Paramètre requis : id (l'identifiant du personnage à récupérer)
 
 ### Ajouter un nouveau personnage
 
@@ -44,44 +44,78 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ```javascript
     const character{
-      charVoc: "", //npc ou joueur
-      characterThumbnail: ".jpg",
-      name: "",
-      genre: "",
-      class: [""],
-      race: [""],
-      alignement: [""],
-      Traits: {
-        PersonalityTraits: "",
-        Ideals: "",
-        Bonds: "",
-        Flaws: "",
+      "charVoc": "", //npc ou joueur
+      "characterThumbnail": ".jpg",
+      "name": "",
+      "genre": "",
+      "class": [""],
+      "race": [""],
+      "alignement": [""],
+      "Traits": {
+        "PersonalityTraits": "",
+        "Ideals": "",
+        "Bonds": "",
+        "Flaws": "",
       },
-      exp: 0,
-      lvl: 1,
-      hitPoints: {
-        totalHP: 20,
-        currentHP: 20,
+      "exp": 0,
+      "lvl": 1,
+      "hitPoints": {
+        "totalHP": 20,
+        "currentHP": 20,
       },
-      statistics: {
-        strength: 0,
-        dexterity: 0,
-        constitution: 0,
-        intelligence: 0,
-        wisdom: 0,
-        charisma: 0,
+      "statistics": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "wisdom": 0,
+        "charisma": 0,
       },
     },
 ```
 
 ### Modifier un personnage existant
 
-PUT character/:id
+[PUT character/:id](http://localhost:3000/character/:id)
 
-blablabla...
+- Paramètre requis :
+  - id (l'identifiant du personnage à récupérer)
+  - un objet personnage dans le corp de la requête.
+
+```javascript
+    const character{
+      "charVoc": "", //npc ou joueur
+      "characterThumbnail": ".jpg",
+      "name": "",
+      "genre": "",
+      "class": [""],
+      "race": [""],
+      "alignement": [""],
+      "Traits": {
+        "PersonalityTraits": "",
+        "Ideals": "",
+        "Bonds": "",
+        "Flaws": "",
+      },
+      "exp": 0,
+      "lvl": 1,
+      "hitPoints": {
+        "totalHP": 20,
+        "currentHP": 20,
+      },
+      "statistics": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "wisdom": 0,
+        "charisma": 0,
+      },
+    },
+```
 
 ### Supprimer un personnage existant
 
-DELETE character/:id
+[DELETE character/:id](http://localhost:3000/character/:id)
 
-blablabla...
+- Paramètre requis : id (l'identifiant du personnage à suprimer)

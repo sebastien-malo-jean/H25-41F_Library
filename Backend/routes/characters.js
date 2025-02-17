@@ -84,7 +84,7 @@ routeur.post("/", async (req, res) => {
 /**
  * Route pour la page pour initialiser la bdd.
  */
-routeur.post("/dbinit", async (req, res) => {
+routeur.post("/dbinit", async (res) => {
   try {
     const characters = require("./data/library");
 
