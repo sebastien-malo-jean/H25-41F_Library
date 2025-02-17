@@ -145,32 +145,32 @@ const Library_character = [
     },
   },
   // {
-  //     charVoc: "", //npc ou joueur
-  //     characterThumbnail: ".jpg",
-  //     name: "",
-  //     genre: "",
-  //     class: [""],
-  //     race: [""],
-  //     alignement: [""],
-  //     Traits: {
-  //       PersonalityTraits: "",
-  //       Ideals: "",
-  //       Bonds: "",
-  //       Flaws: "",
+  //     "charVoc": "", //npc ou joueur
+  //     "characterThumbnail": ".jpg",
+  //     "name": "",
+  //     "genre": "",
+  //     "class": [""],
+  //     "race": [""],
+  //     "alignement": [""],
+  //     "Traits": {
+  //       "PersonalityTraits": "",
+  //       "Ideals": "",
+  //       "Bonds": "",
+  //       "Flaws": "",
   //     },
-  //     exp: 0,
-  //     lvl: 1,
-  //     hitPoints: {
-  //       totalHP: 20,
-  //       currentHP: 20,
+  //     "exp": 0,
+  //     "lvl": 1,
+  //     "hitPoints": {
+  //       "totalHP": 20,
+  //       "currentHP": 20,
   //     },
-  //     statistics: {
-  //       strength: 0,
-  //       dexterity: 0,
-  //       constitution: 0,
-  //       intelligence: 0,
-  //       wisdom: 0,
-  //       charisma: 0,
+  //     "statistics": {
+  //       "strength": 0,
+  //       "dexterity": 0,
+  //       "constitution": 0,
+  //       "intelligence": 0,
+  //       "wisdom": 0,
+  //       "charisma": 0,
   //     },
   //   },
 ];

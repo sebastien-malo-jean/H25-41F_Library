@@ -36,7 +36,9 @@ routeur.get("/", async (req, res) => {
     return res.status(200).json(characters);
   } catch (error) {
     console.error("Erreur lors de la récupération du personnage :", error);
-    return res.status(500).json({ error: "Erreur serveur" });
+    return res
+      .status(500)
+      .json({ error: "Erreur lors de la récupération du personnage" });
   }
 });
 
@@ -60,10 +62,21 @@ routeur.get("/:id", async (req, res) => {
 });
 
 // POST
-routeur.post("/", (req, res) => {
-  return res.json({
-    msg: "Ici, c'est la page pour la création d'un Personnage.",
-  });
+routeur.post("/", async (req, res) => {
+  try {
+    const body = req.body;
+    //   console.log(body);
+    await db.collection("characters").add(body);
+    const response = {
+      msg: "le personnage à bien été ajouter à la bibliothèque.",
+    };
+    res.status(201).json(response);
+  } catch (error) {
+    console.error("Erreur lors de la création du personnage :", error);
+    return res
+      .status(500)
+      .json({ error: "Erreur lors de la création du personnage" });
+  }
 });
 
 /**
@@ -102,8 +115,23 @@ routeur.post("/dbinit", async (req, res) => {
 });
 
 // PUT
-routeur.put("/:id", (req, res) => {
-  return res.json({ msg: "Ici, c'est la page pour modifier un personnage." });
+routeur.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    await db.collection("characters").doc(id).update(body);
+    const response = {
+      msg: "le personnage à été modifié avec succès!",
+      personnage: body,
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Erreur lors de la modification du personnage :", error);
+    return res
+      .status(500)
+      .json({ error: "Erreur lors de la modification du personnage" });
+  }
 });
 
 // DELETE
