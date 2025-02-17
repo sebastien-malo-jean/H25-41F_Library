@@ -38,7 +38,7 @@ routeur.get("/", async (req, res) => {
     console.error("Erreur lors de la récupération du personnage :", error);
     return res
       .status(500)
-      .json({ error: "Erreur lors de la récupération du personnage" });
+      .json({ error: "Erreur lors de la récupération du personnage." });
   }
 });
 
@@ -57,7 +57,9 @@ routeur.get("/:id", async (req, res) => {
     return res.status(200).json({ character });
   } catch (error) {
     console.error("Erreur lors de la récupération du personnage :", error);
-    return res.status(500).json({ error: "Erreur serveur" });
+    return res
+      .status(500)
+      .json({ error: "Erreur serveur lors de la récupération du personnage." });
   }
 });
 
@@ -75,7 +77,7 @@ routeur.post("/", async (req, res) => {
     console.error("Erreur lors de la création du personnage :", error);
     return res
       .status(500)
-      .json({ error: "Erreur lors de la création du personnage" });
+      .json({ error: "Erreur lors de la création du personnage." });
   }
 });
 
@@ -99,7 +101,7 @@ routeur.post("/dbinit", async (req, res) => {
           await db.collection("characters").add(character);
         } else {
           return res
-            .status(200)
+            .status(409)
             .json({ msg: "Un ou plusieurs personnages existent déjà." });
         }
       }
@@ -109,7 +111,7 @@ routeur.post("/dbinit", async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      msg: "Une erreur est survenue",
+      msg: "Une erreur est survenue l'ors de l'initialisation de la base de donnée.",
     });
   }
 });
@@ -130,15 +132,26 @@ routeur.put("/:id", async (req, res) => {
     console.error("Erreur lors de la modification du personnage :", error);
     return res
       .status(500)
-      .json({ error: "Erreur lors de la modification du personnage" });
+      .json({ error: "Erreur lors de la modification du personnage." });
   }
 });
 
 // DELETE
-routeur.delete("/:id", (req, res) => {
-  return res.json({
-    msg: "Ici c'est la page pour supprimer un personnage de la bibliotheque.",
-  });
+routeur.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.collection("characters").doc(id).delete();
+    const response = {
+      msg: "Le personnage à bien été suprimé. ... :(",
+      id: id,
+    };
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Erreur lors de la supression du personnage :", error);
+    return res
+      .status(500)
+      .json({ error: "Erreur lors de la supression du personnage." });
+  }
 });
 
 module.exports = routeur;
