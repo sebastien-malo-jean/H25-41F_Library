@@ -21,7 +21,7 @@ routeur.get(
         return res.status(400).json({ msg: "données invalides" });
       }
       let {
-        limit = 3,
+        limit = 10,
         start = 0,
         orderBy = "name",
         orderDirection = "asc",
