@@ -1,46 +1,58 @@
 const express = require("express");
 const routeur = express.Router();
 const db = require("../config/db");
+const { check, validationResult } = require("express-validator");
 
 /**
  * Routes établie pour récuperer tous les personnages de la base de données.
  */
 // GET
 
-routeur.get("/", async (req, res) => {
-  try {
-    let {
-      limit = 3,
-      start = 0,
-      orderBy = "name",
-      orderDirection = "asc",
-    } = req.query;
-    limit = Number(limit);
-    start = Number(start);
+routeur.get(
+  "/",
+  [
+    check("orderBy").escape().trim().optional().isLength({ max: 100 }),
+    check("orderDirection").escape().trim().optional().isIn(["asc", "desc"]),
+  ],
+  async (req, res) => {
+    try {
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        return res.status(400).json({ msg: "données invalides" });
+      }
+      let {
+        limit = 3,
+        start = 0,
+        orderBy = "name",
+        orderDirection = "asc",
+      } = req.query;
+      limit = Number(limit);
+      start = Number(start);
 
-    const characters = [];
+      const characters = [];
 
-    const docRefs = await db
-      .collection("characters")
-      .orderBy(orderBy, orderDirection)
-      .offset(start)
-      .limit(limit)
-      .get();
+      const docRefs = await db
+        .collection("characters")
+        .orderBy(orderBy, orderDirection)
+        .offset(start)
+        .limit(limit)
+        .get();
 
-    docRefs.forEach((doc) => {
-      const data = doc.data();
-      const character = { id: doc.id, ...data };
-      characters.push(character);
-    });
+      docRefs.forEach((doc) => {
+        const data = doc.data();
+        const character = { id: doc.id, ...data };
+        characters.push(character);
+      });
 
-    return res.status(200).json(characters);
-  } catch (error) {
-    console.error("Erreur lors de la récupération du personnage :", error);
-    return res
-      .status(500)
-      .json({ error: "Erreur lors de la récupération du personnage." });
+      return res.status(200).json(characters);
+    } catch (error) {
+      console.error("Erreur lors de la récupération du personnage :", error);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération du personnage." });
+    }
   }
-});
+);
 
 routeur.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -84,13 +96,13 @@ routeur.post("/", async (req, res) => {
 /**
  * Route pour la page pour initialiser la bdd.
  */
-routeur.post("/dbinit", async (res) => {
+routeur.post("/dbinit", async (req, res) => {
   try {
-    const characters = require("./data/library");
+    const characters = require("../data/library");
 
     //TODO: vérifier si le livre est déja dans la bdd.
 
-    for (character of characters) {
+    for (const character of characters) {
       if (character.name) {
         const existingCharacter = await db
           .collection("characters")
