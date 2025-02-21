@@ -14,14 +14,9 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 // Routes
+server.use(express.static(path.join(__dirname, "public")));
 server.use("/characters", require("./routes/characters"));
 server.use("/users", require("./routes/users"));
-server.use(express.static(path.join(__dirname, "public")));
-
-// Page d'index
-server.get("/", async (req, res) => {
-  res.json({ msg: "Ici c'est la page d'index" });
-});
 
 // Ressource 404
 server.use("*", (req, res) => {

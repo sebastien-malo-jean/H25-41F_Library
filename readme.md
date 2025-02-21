@@ -139,7 +139,12 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ### Insciption d'utilisateurs
 
-[POST users/inscription](https://h25-41f-library.onrender.com/users/inscription)\
+#### routes pour s'inscrire sur l'API
+
+[POST users/inscription](https://h25-41f-library.onrender.com/users/inscription)
+
+#### routes pour se connecter sur l'API
+
 [POST users/connection](https://h25-41f-library.onrender.com/users/connection)
 
 - paramètres requis : information sur l'utilisateur
