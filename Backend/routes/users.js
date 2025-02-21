@@ -56,4 +56,46 @@ router.post("/inscription", validations, async (req, res) => {
   }
 });
 
+// Connexion
+router.post("/connection", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email et mot de passe requis" });
+    }
+
+    const userRefs = await db
+      .collection("users")
+      .where("email", "==", email)
+      .limit(1)
+      .get();
+
+    if (userRefs.empty) {
+      return res.status(400).json({ msg: "Email ou mot de passe incorrect" });
+    }
+
+    const userDoc = userRefs.docs[0];
+    const userData = userDoc.data();
+    const userId = userDoc.id;
+
+    const isMatch = await bcrypt.compare(password, userData.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Email ou mot de passe incorrect" });
+    }
+
+    const token = jwt.sign(
+      { id: userId, email: userData.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.json({ msg: "Connexion réussie", token, userId });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: "Erreur serveur" });
+  }
+});
+
+module.exports = router;
+
 module.exports = router;

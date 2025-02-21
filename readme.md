@@ -99,7 +99,7 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
   - id (l'identifiant du personnage à récupérer)
   - un objet personnage dans le corp de la requête.
 
-```javascript
+```js
     const character{
       "charVoc": "", //npc ou joueur
       "characterThumbnail": ".jpg",
@@ -136,3 +136,18 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 [DELETE characters/:id](https://h25-41f-library.onrender.com/characters/:id)
 
 - Paramètre requis : id (l'identifiant du personnage à suprimer)
+
+### Insciption d'utilisateurs
+
+[POST users/inscription](https://h25-41f-library.onrender.com/users/inscription)\
+[POST users/connection](https://h25-41f-library.onrender.com/users/connection)
+
+- paramètres requis : information sur l'utilisateur
+
+```JS
+  const user{
+    "name": "Maxime Lacasse",
+    "email": "maxime@lacasse.com",
+    "password":"12345678"
+}
+```
