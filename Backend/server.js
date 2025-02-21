@@ -72,7 +72,7 @@ server.post("user/connection", () => {
 // ressource 404
 server.use((req, res) => {
   res.statusCode = 404;
-  return res.json({ msg: "Ici, c'est la page d'erreur 404." });
+  return res.json({ msg: "Erreur 404. ce que vous chercher n'existe pas." });
 });
 
 server.listen(process.env.PORT, () => {
