@@ -15,7 +15,7 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 #### paramètres possibles
 
-- [https://h25-41f-library.onrender.com/characters/character?limit=2&orderBy=name&orderDirection=asc](https://h25-41f-library.onrender.com/characters/character?limit=2&orderBy=name&orderDirection=asc)
+- [https://h25-41f-library.onrender.com/characters?limit=2&orderBy=name&orderDirection=asc](https://h25-41f-library.onrender.com/characters?limit=2&orderBy=name&orderDirection=asc)
 
 - orderBy
   - name
