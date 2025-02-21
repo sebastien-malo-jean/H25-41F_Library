@@ -1,85 +1,101 @@
-// importation des librairies
+// Importation des librairies
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-const { log } = require("console");
-const server = express();
-const routeCharacter = require("./routes/characters");
 const bcrypt = require("bcrypt");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-// initialisation des variables d'environement
+// Initialisation
 dotenv.config();
+const server = express();
+const PORT = process.env.PORT || 3000;
 
-//Middleware pour 'parser' le JSON
+// Middleware pour parser le JSON et le x-www-form-urlencoded
 server.use(express.json());
-//Middleware pour parser les  requêtes POST aevc un body en x-www-form-urlencoded
 server.use(express.urlencoded({ extended: true }));
 
-// -- Routes de points d'acces -- //
-server.use("/characters", routeCharacter);
-//permission d'acces aux dossiers publiques
-const publicFile = path.join(__dirname, "public");
-server.use(express.static(publicFile));
+// Routes
+server.use("/characters", require("./routes/characters"));
+server.use(express.static(path.join(__dirname, "public")));
 
+// Page d'index
 server.get("/", async (req, res) => {
-  await res.json({ msg: "ici c'est la page d'index" });
+  res.json({ msg: "Ici c'est la page d'index" });
 });
 
+// Inscription
 server.post(
-  "users/inscription",
+  "/users/inscription",
   [check("email").escape().trim().notEmpty().isEmail().normalizeEmail()],
-  async () => {
-    //valdation des information
-
-    // TODO
-    const erreurValidation = validationResult(erq);
-
+  async (req, res) => {
+    const erreurValidation = validationResult(req);
     if (!erreurValidation.isEmpty()) {
-      return res.status(400).json({ msg: "Données invalidées" });
+      return res.status(400).json({ msg: "Données invalides" });
     }
 
-    //recuperation des information du body avec identifiant unique, mot de passe
     const { email, password } = req.body;
-    //verification des doublon
     const userRefs = await db
       .collection("users")
       .where("email", "==", email)
       .get();
-    if (userRefs.docs.length > 0) {
-      return res.status(400).json({ msg: "utilisateur existant" });
+    if (!userRefs.empty) {
+      return res.status(400).json({ msg: "Utilisateur existant" });
     }
-    //encryprtage du mot de passe
-    const hash = await bcrypt.hash(password, 10);
-    const user = { ...req.body, password: hash };
-    //ajout de l'utilisateur à la db
-    await db.collection("user").add(user);
 
-    return res.status(201).json({ msg: "l'utilisateur à été créé" });
+    const hash = await bcrypt.hash(password, 10);
+    await db.collection("users").add({ email, password: hash });
+
+    return res.status(201).json({ msg: "L'utilisateur a été créé" });
   }
 );
 
-server.post("user/connection", () => {
-  //validation des données
-  //récupéartion des information du body
+// Connexion
+server.post("/user/connection", async (req, res) => {
   const { email, password } = req.body;
-  //vérification du mdp
+  if (!email || !password) {
+    return res.status(400).json({ msg: "Email et mot de passe requis" });
+  }
 
-  //retour de l'authentification
+  const userRefs = await db
+    .collection("users")
+    .where("email", "==", email)
+    .get();
+  if (userRefs.empty) {
+    return res.status(400).json({ msg: "Utilisateur non trouvé" });
+  }
+
+  const userData = userRefs.docs[0].data();
+  const isMatch = await bcrypt.compare(password, userData.password);
+  if (!isMatch) {
+    return res.status(400).json({ msg: "Mot de passe incorrect" });
+  }
+
+  const token = jwt.sign(
+    { id: userRefs.docs[0].id, email: userData.email },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+  return res.json({ msg: "Connexion réussie", token });
 });
 
-// ressource 404
-server.use((req, res) => {
-  res.statusCode = 404;
-  return res.json({ msg: "Erreur 404. ce que vous chercher n'existe pas." });
+// Ressource 404
+server.use("*", (req, res) => {
+  res
+    .status(404)
+    .json({ msg: "Erreur 404. Ce que vous cherchez n'existe pas." });
 });
 
-server.listen(process.env.PORT, () => {
-  console.log(`Le serveur est en écoute sur le port : ${process.env.PORT}`);
+// Gestion des erreurs et fermeture propre
+process.on("SIGTERM", () => {
+  console.log("Fermeture du serveur...");
+  server.close(() => {
+    console.log("Serveur arrêté proprement");
+    process.exit(0);
+  });
 });
 
-// function auth(req, res, next) {
-//   console.log("Authentification en cours...");
-//   next();
-// }
+// Démarrage du serveur
+server.listen(PORT, () => {
+  console.log(`Serveur en écoute sur le port : ${PORT}`);
+});

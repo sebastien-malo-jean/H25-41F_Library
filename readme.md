@@ -10,12 +10,12 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ### Récupération de la liste de tous les personnages
 
-[GET /character](http://localhost:3000/character)
+[GET /characters](https://h25-41f-library.onrender.com/characters)
 <!-- https://h25-41f-library.onrender.com -->
 
 #### paramètres possibles
 
-- [http://localhost:3000/character?limit=2&orderBy=name&orderDirection=asc](http://localhost:3000/character?limit=2&orderBy=name&orderDirection=asc)
+- [https://h25-41f-library.onrender.com/characters/character?limit=2&orderBy=name&orderDirection=asc](https://h25-41f-library.onrender.com/characters/character?limit=2&orderBy=name&orderDirection=asc)
 
 - orderBy
   - name
@@ -31,15 +31,31 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 - limit
   - un nombre entier
 
+### Récupération de la liste des personnages par statistiques
+
+#### paramètres possibles pour les statistiques
+
+- orderBy
+  - [strength](https://h25-41f-library.onrender.com/characters/statistics/strength)
+  - [dexterity](https://h25-41f-library.onrender.com/characters/statistics/dexterity)
+  - [constitution](https://h25-41f-library.onrender.com/characters/statistics/constitution)
+  - [intelligence](https://h25-41f-library.onrender.com/characters/statistics/intelligence)
+  - [wisdom](https://h25-41f-library.onrender.com/characters/statistics/wisdom)
+  - [charisma](https://h25-41f-library.onrender.com/characters/statistics/charisma)
+
+- orderDirection
+  - asc
+  - desc
+
 ### Récupération d'un personnage spécifique
 
-[GET /character/:id](http://localhost:3000/character/G7FrjAFaAZyEoLcuP6h0)
+[GET /character/:id](https://h25-41f-library.onrender.com/characters/G7FrjAFaAZyEoLcuP6h0)
 
 - Paramètre requis : id (l'identifiant du personnage à récupérer)
 
 ### Ajouter un nouveau personnage
 
-[POST /character/](http://localhost:3000/character/)
+[POST /characters/](https://h25-41f-library.onrender.com/characters/)
 
 - Paramètre requis : un objet personnage dans le corp de la requête.
 
@@ -77,7 +93,7 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ### Modifier un personnage existant
 
-[PUT character/:id](http://localhost:3000/character/:id)
+[PUT characters/:id](https://h25-41f-library.onrender.com/characters/:id)
 
 - Paramètre requis :
   - id (l'identifiant du personnage à récupérer)
@@ -117,6 +133,6 @@ Cette API permet d'afficher, d'ajouter, de modifier et de supprimer des personna
 
 ### Supprimer un personnage existant
 
-[DELETE character/:id](http://localhost:3000/character/:id)
+[DELETE characters/:id](https://h25-41f-library.onrender.com/characters/:id)
 
 - Paramètre requis : id (l'identifiant du personnage à suprimer)
